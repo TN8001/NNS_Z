@@ -49,8 +49,9 @@ namespace NNS_Z
 
                 return new T();
             }
+
         }
-        private string GetConfigFilePath()
+            private string GetConfigFilePath()
         {
             var path = Assembly.GetExecutingAssembly().Location;
             var dir = Path.GetDirectoryName(path);

@@ -39,7 +39,8 @@ namespace NNS_Z
             };
 
             SetRegistryKey(); // IEをEdgeモードに
-            cssString = GetCss();
+            JSErrorSuppression(); // IEのスクリプトエラーを抑制
+            cssString = ReadCssFile("NicoNama.css");
 
             //var url = $"http://live.nicovideo.jp/search?keyword=一般&filter=+:official:"; // スクショ取る用
             var url = $"http://live.nicovideo.jp/search?keyword={Setting.SearchWord}";
@@ -60,12 +61,21 @@ namespace NNS_Z
             return element?.getAttribute("value") as string ?? "";
         }
 
-        private string GetCss()
+        private void JSErrorSuppression()
+        {
+            // http://qiita.com/hbsnow/items/3b92775c75b8a6dc171f
+            var axIWebBrowser2 = typeof(WebBrowser).GetProperty("AxIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
+            var comObj = axIWebBrowser2.GetValue(browser, null);
+            comObj.GetType().InvokeMember("Silent", BindingFlags.SetProperty, null, comObj, new object[] { true });
+            comObj.GetType().InvokeMember("RegisterAsDropTarget", BindingFlags.SetProperty, null, comObj, new object[] { false, });
+        }
+
+        private string ReadCssFile(string name)
         {
             try
             {
                 var exeDir = AppDomain.CurrentDomain.BaseDirectory;
-                using(var reader = new StreamReader(Path.Combine(exeDir, "NicoNama.css")))
+                using(var reader = new StreamReader(Path.Combine(exeDir, name)))
                     return reader.ReadToEnd();
             }
             catch(FileNotFoundException) { }
@@ -97,20 +107,12 @@ namespace NNS_Z
         {
             Debug.WriteLine("Navigated");
 
-            JSErrorSuppression();
+            //JSErrorSuppression();
             CssInjection();
 
             timer.Stop();
             timer.Start();
             storyboard.Seek(TimeSpan.Zero);
-        }
-        private void JSErrorSuppression()
-        {
-            // http://qiita.com/hbsnow/items/3b92775c75b8a6dc171f
-            var axIWebBrowser2 = typeof(WebBrowser).GetProperty("AxIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
-            var comObj = axIWebBrowser2.GetValue(browser, null);
-            comObj.GetType().InvokeMember("Silent", BindingFlags.SetProperty, null, comObj, new object[] { true });
-            comObj.GetType().InvokeMember("RegisterAsDropTarget", BindingFlags.SetProperty, null, comObj, new object[] { false, });
         }
         private void CssInjection()
         {
@@ -138,9 +140,13 @@ namespace NNS_Z
         }
         private void DeleteRegistryKey()
         {
-            var key = Registry.CurrentUser.CreateSubKey(KEY);
-            key.DeleteValue(processName);
-            key.Close();
+            try
+            {
+                var key = Registry.CurrentUser.CreateSubKey(KEY);
+                key.DeleteValue(processName);
+                key.Close();
+            }
+            catch(Exception) { }
         }
     }
 }
