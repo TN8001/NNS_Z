@@ -23,6 +23,7 @@ namespace NNS_Z
 
         public MainWindow()
         {
+            var m = Guid.NewGuid();
             InitializeComponent();
 
             storyboard = Resources["MyStoryboard"] as Storyboard;

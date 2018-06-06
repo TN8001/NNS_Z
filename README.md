@@ -1,9 +1,13 @@
-# まさかの更新 NNS_Z ニコ生サーチ(雑) on the Edge
+まさかの更新 
+# NNS_Z ニコ生サーチ(雑) on the Edge
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
 ![アプリスクリーンショット](https://github.com/TN8001/NNS_Z/blob/master/AppImage.png)
 ## 概要
 [Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit)にEdgeベースのWebViewが入ったので、試用がてら動かなくなっていたNNS_Zをバージョンアップ。
 
 WebViewを使ってみたかっただけなので実用性は低いです。（[NNS_T](https://github.com/TN8001/NNS_T)をお使いください）
+
+MSHTMLの依存がなくなったので一応バイナリ用意しました（Windows 10 April 2018 Update以降が必要 だと思います）
 
 ## ライセンス
 [MIT](https://github.com/TN8001/NNS_Z/blob/master/LICENSE)
@@ -16,20 +20,17 @@ WebViewを使ってみたかっただけなので実用性は低いです。（[NNS_T](https://github.co
 ## WebViewの感想
 WebBrowserのレンダリングエンジンをIEからEdgeに変更できればよかったのでしょうがいろいろ難しいのでしょう、WebViewは全く別のコントロールです。
 
-最低限のイベントはありますが、操作周りはInvokeScriptAsyncによるJavaScriptの実行に頼るしかありません。
-
+最低限のイベントはありますが、操作周りはInvokeScriptAsyncによるJavaScriptの実行に頼るしかありません。  
 JS全くわからない身としては「勘弁してくれよ」と言いたいですねｗ
 
 
 
-旧版が動かなかったので直接比較はできていませんが、WebBrowserに比べcssの挿入タイミング（NavigatedとDOMContentLoaded）が遅い（タイミングでなく反映か？）ような印象です。
-
+旧版が動かなかったので直接比較はできていませんが、WebBrowserに比べcssの挿入タイミング（NavigatedとDOMContentLoaded）が遅い（タイミングでなく反映か？）ような印象です。  
 そのため再検索時に表示が大変バタバタします。
 
 
 方法があるとは思いますが、Edgeの開発者ツールの出し方がわからずデバッグが面倒でした。
 
-
-感想としては「あんまりうれしくないなぁ」となりますが、.NET Framework4.8 XAML Islandsには非常に期待感を持っています。
-
+---
+感想としては「あんまりうれしくないなぁ」となりますが、.NET Framework4.8 XAML Islandsには非常に期待感を持っています。  
 UWPは制限事項が多く、クラシックデスクトップアプリを選択していましたがUWPでしかできない（できても非常に面倒）ことも増えてきてモヤモヤしていたところ、向こうから歩み寄りがあるとは思っていませんでした。
