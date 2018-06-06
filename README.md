@@ -3,10 +3,8 @@
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
 ![アプリスクリーンショット](https://github.com/TN8001/NNS_Z/blob/master/AppImage.png)
 ## 概要
-[Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit)にEdgeベースのWebViewが入ったので、試用がてら動かなくなっていたNNS_Zをバージョンアップ。
-
-WebViewを使ってみたかっただけなので実用性は低いです。（[NNS_T](https://github.com/TN8001/NNS_T)をお使いください）
-
+[Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit)にEdgeベースのWebViewが入ったので、試用がてら動かなくなっていたNNS_Zをバージョンアップ。  
+WebViewを使ってみたかっただけなので実用性は低いです。（[NNS_T](https://github.com/TN8001/NNS_T)をお使いください）  
 MSHTMLの依存がなくなったので一応バイナリ用意しました（Windows 10 April 2018 Update以降が必要 だと思います）
 
 ## ライセンス
@@ -33,4 +31,4 @@ JS全くわからない身としては「勘弁してくれよ」と言いたいですねｗ
 
 ---
 感想としては「あんまりうれしくないなぁ」となりますが、.NET Framework4.8 XAML Islandsには非常に期待感を持っています。  
-UWPは制限事項が多く、クラシックデスクトップアプリを選択していましたがUWPでしかできない（できても非常に面倒）ことも増えてきてモヤモヤしていたところ、向こうから歩み寄りがあるとは思っていませんでした。
+UWPは制限事項が多く、クラシックデスクトップアプリを選択していましたがUWPでしかできない（できても非常に面倒な）ことも増えてきてモヤモヤしていたところ、向こうから歩み寄りがあるとは思っていませんでした。

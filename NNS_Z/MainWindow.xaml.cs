@@ -12,7 +12,7 @@ namespace NNS_Z
 {
     public partial class MainWindow : Window
     {
-        public static Duration Duration { get; } = TimeSpan.FromMinutes(1);
+        public static Duration Duration { get; } = TimeSpan.FromMinutes(5);
 
         public SettingsModel Settings { get; }
 
