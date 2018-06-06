@@ -1,152 +1,139 @@
-﻿using Microsoft.Win32;
-using mshtml;
+﻿using Microsoft.Toolkit.Win32.UI.Controls.Interop.WinRT;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 using System.Windows.Threading;
 
 namespace NNS_Z
 {
     public partial class MainWindow : Window
     {
-        public SettingsModel Setting { get; }
+        public static Duration Duration { get; } = TimeSpan.FromMinutes(1);
+
+        public SettingsModel Settings { get; }
 
         private DispatcherTimer timer = new DispatcherTimer();
         private Storyboard storyboard;
-        private string cssString;
+        private string css => _css ?? (_css = ReadCss());
+        private string _css;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            var serializer = new SerializeHelper<SettingsModel>();
-            try { Setting = serializer.Load(); }
-            catch(SerializationException) { Application.Current.MainWindow.Close(); }
-
+            storyboard = Resources["MyStoryboard"] as Storyboard;
+            Settings = SettingsHelper.LoadOrDefault<SettingsModel>(GetConfigPath());
             DataContext = this; //ViewModel省略
 
-            Closing += (s, e) =>
-            {
-                DeleteRegistryKey();
-                Setting.SearchWord = GetSearchWord();
-                serializer.Save(Setting);
-            };
+            var url = $"http://live.nicovideo.jp/search?keyword={Settings.SearchWord}";
+            WebView.Navigate(url);
 
-            SetRegistryKey(); // IEをEdgeモードに
-            JSErrorSuppression(); // IEのスクリプトエラーを抑制
-            cssString = ReadCssFile("NicoNama.css");
-
-            //var url = $"http://live.nicovideo.jp/search?keyword=一般&filter=+:official:"; // スクショ取る用
-            var url = $"http://live.nicovideo.jp/search?keyword={Setting.SearchWord}";
-            browser.Navigate(url);
-
-            timer.Interval = TimeSpan.FromMinutes(5); //xaml側AnimationのDurationも一緒に変えること
-            timer.Tick += Timer_Tick;
-            timer.Start();
-
-            storyboard = Resources["MyStoryboard"] as Storyboard;
-            storyboard.Begin();
+            timer.Interval = Duration.TimeSpan;
+            timer.Tick += Timer_TickAsync;
         }
 
-        private string GetSearchWord()
+        private string GetConfigPath()
         {
-            var doc = browser.Document as IHTMLDocument3;
-            var element = doc.getElementById("search_form_word");
-            return element?.getAttribute("value") as string ?? "";
+            var exeDir = AppDomain.CurrentDomain.BaseDirectory;
+            return Path.Combine(exeDir, ProductInfo.Name + ".config");
         }
-
-        private void JSErrorSuppression()
-        {
-            // http://qiita.com/hbsnow/items/3b92775c75b8a6dc171f
-            var axIWebBrowser2 = typeof(WebBrowser).GetProperty("AxIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
-            var comObj = axIWebBrowser2.GetValue(browser, null);
-            comObj.GetType().InvokeMember("Silent", BindingFlags.SetProperty, null, comObj, new object[] { true });
-            comObj.GetType().InvokeMember("RegisterAsDropTarget", BindingFlags.SetProperty, null, comObj, new object[] { false, });
-        }
-
-        private string ReadCssFile(string name)
+        private string ReadCss()
         {
             try
             {
                 var exeDir = AppDomain.CurrentDomain.BaseDirectory;
-                using(var reader = new StreamReader(Path.Combine(exeDir, name)))
-                    return reader.ReadToEnd();
+                return File.ReadAllText(Path.Combine(exeDir, "NicoNama.css"))?.Replace("\r\n", "");
             }
-            catch(FileNotFoundException) { }
-            catch(IOException) { }
-            return null;
+            catch { return ""; }
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private async void Timer_TickAsync(object sender, EventArgs e)
         {
             Debug.WriteLine("Timer_Tick");
 
-            var doc = browser.Document as IHTMLDocument3;
-            doc.getElementById("search_form_submit")?.click();
+            await SubmitAsync();
+        }
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            Debug.WriteLine("Closing");
+
+            SettingsHelper.Save(Settings, GetConfigPath());
         }
 
-        private void Navigating(object sender, NavigatingCancelEventArgs e)
+        private void WebView_NavigationStarting(object sender, WebViewControlNavigationStartingEventArgs e)
         {
-            Debug.WriteLine("Navigating:" + e.Uri);
+            Debug.WriteLine("NavigationStarting");
 
-            // 放送のリンクは規定ブラウザに飛ばす
-            if(e.Uri.ToString().StartsWith("http://live.nicovideo.jp/searchresult"))
+            if(e.Uri.AbsolutePath == @"/search")
+            {
+                timer.Stop();
+                storyboard.Stop();
+            }
+            else
             {
                 Process.Start(e.Uri.ToString());
                 e.Cancel = true;
             }
         }
-
-        private void Navigated(object sender, NavigationEventArgs e)
+        private void WebView_ContentLoading(object sender, WebViewControlContentLoadingEventArgs e)
         {
-            Debug.WriteLine("Navigated");
+            Debug.WriteLine("ContentLoading");
+        }
+        private async void WebView_DOMContentLoaded(object sender, WebViewControlDOMContentLoadedEventArgs e)
+        {
+            Debug.WriteLine("DOMContentLoaded");
 
-            //JSErrorSuppression();
-            CssInjection();
+            await InsertCssAsync();
+            await SortSelecterMoveAsync();
+            Settings.SearchWord = await GetSearchWordAsync();
+        }
+        private void WebView_NavigationCompleted(object sender, WebViewControlNavigationCompletedEventArgs e)
+        {
+            if(e.IsSuccess)
+                Debug.WriteLine($"NavigationCompleted: {e.Uri.ToString()}");
+            else
+                Debug.WriteLine($"NavigationFailed: {e.Uri.ToString()} Status: {e.WebErrorStatus.ToString()}");
 
-            timer.Stop();
             timer.Start();
-            storyboard.Seek(TimeSpan.Zero);
-        }
-        private void CssInjection()
-        {
-            var doc = browser.Document as HTMLDocument;
-            var css = doc.createStyleSheet();
-            css.cssText = cssString;
-            // css.cssText = GetCss();
+            storyboard.Begin();
         }
 
-        private void LoadCompleted(object sender, NavigationEventArgs e)
+        private async Task SubmitAsync()
         {
-            Debug.WriteLine("LoadCompleted");
+            var js = @"document.getElementsByClassName('search-form-submit-button')[0].click();";
+            await WebView.InvokeScriptAsync("eval", new string[] { js });
         }
-
-
-        private const string KEY = @"Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
-        private string processName = Process.GetCurrentProcess().ProcessName + ".exe";
-
-        private void SetRegistryKey()
+        private async Task InsertCssAsync()
         {
-            // http://blog.livedoor.jp/tkarasuma/archives/1036522520.html
-            var key = Registry.CurrentUser.CreateSubKey(KEY);
-            key.SetValue(processName, 11001, RegistryValueKind.DWord);
-            key.Close();
+            var js = $@"(function() {{
+                            var node = document.createElement('style');
+                            document.body.appendChild(node);
+                            window.addStyleString = function(str) {{ node.innerHTML = str; }}
+                        }}());
+                        addStyleString('{css}');";
+
+            await WebView.InvokeScriptAsync("eval", new string[] { js });
         }
-        private void DeleteRegistryKey()
+        private async Task SortSelecterMoveAsync()
         {
-            try
-            {
-                var key = Registry.CurrentUser.CreateSubKey(KEY);
-                key.DeleteValue(processName);
-                key.Close();
-            }
-            catch(Exception) { }
+            var js = $@"var target = document.getElementById('sortselect');
+                        var container = document.getElementsByClassName('setting-option-aret')[0];
+                        container.appendChild(target); ";
+            await WebView.InvokeScriptAsync("eval", new string[] { js });
+        }
+        private async Task<string> GetSearchWordAsync()
+        {
+            var js = $@"document.getElementsByClassName('search-form-textbox')[0].value;";
+            return await WebView.InvokeScriptAsync("eval", new string[] { js });
+        }
+        private async Task SetSearchWordAsync()
+        {
+            var js = $@"document.getElementsByClassName('search-form-textbox')[0].value = '{Settings.SearchWord}';";
+            await WebView.InvokeScriptAsync("eval", new string[] { js });
         }
     }
 }
