@@ -1,34 +1,34 @@
-�܂����̍X�V 
-# NNS_Z �j�R���T�[�`(�G) on the Edge
+﻿まさかの更新 
+# NNS_Z ニコ生サーチ(雑) on the Edge
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
-![�A�v���X�N���[���V���b�g](https://github.com/TN8001/NNS_Z/blob/master/AppImage.png)
-## �T�v
-[Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit)��Edge�x�[�X��WebView���������̂ŁA���p���Ă瓮���Ȃ��Ȃ��Ă���NNS_Z���o�[�W�����A�b�v�B  
-WebView���g���Ă݂������������Ȃ̂Ŏ��p���͒Ⴂ�ł��B�i[NNS_T](https://github.com/TN8001/NNS_T)�����g�����������j  
-MSHTML�̈ˑ����Ȃ��Ȃ����̂ňꉞ�o�C�i���p�ӂ��܂����iWindows 10 April 2018 Update�ȍ~���K�v ���Ǝv���܂��j
+![アプリスクリーンショット](https://github.com/TN8001/NNS_Z/blob/master/AppImage.png)
+## 概要
+[Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit)にEdgeベースのWebViewが入ったので、試用がてら動かなくなっていたNNS_Zをバージョンアップ。  
+WebViewを使ってみたかっただけなので実用性は低いです。（[NNS_T](https://github.com/TN8001/NNS_T)をお使いください）  
+MSHTMLの依存がなくなったので一応バイナリ用意しました（Windows 10 April 2018 Update以降が必要 だと思います）
 
-## ���C�Z���X
+## ライセンス
 [MIT](https://github.com/TN8001/NNS_Z/blob/master/LICENSE)
-## ���ӎ���
-* ��ؐӔC�͎����܂���
-* �s�v�v�f�̔�\�����S�ł��܂背�C�A�E�g�͂������Ă��܂��񂪁A���ɂ���Ă͕\��������邩������܂���
-* �����I�v�V�����͕ۑ�����܂���
-* ���s�t�@�C���̃t�H���_�ɐݒ�t�@�C�������̂ŏ������߂�t�H���_�ɂ��Ă��������iProgram Files���͔����Ă��������j
+## 注意事項
+* 一切責任は持ちません
+* 不要要素の非表示中心であまりレイアウトはいじっていませんが、環境によっては表示が崩れるかもしれません
+* 検索オプションは保存されません
+* 実行ファイルのフォルダに設定ファイルを作るので書き込めるフォルダにしてください（Program Files等は避けてください）
 
-## WebView�̊��z
-WebBrowser�̃����_�����O�G���W����IE����Edge�ɕύX�ł���΂悩�����̂ł��傤�����낢�����̂ł��傤�AWebView�͑S���ʂ̃R���g���[���ł��B
+## WebViewの感想
+WebBrowserのレンダリングエンジンをIEからEdgeに変更できればよかったのでしょうがいろいろ難しいのでしょう、WebViewは全く別のコントロールです。
 
-�Œ���̃C�x���g�͂���܂����A��������InvokeScriptAsync�ɂ��JavaScript�̎��s�ɗ��邵������܂���B  
-JS�S���킩��Ȃ��g�Ƃ��Ắu���ق��Ă����v�ƌ��������ł��˂�
-
-
-
-���ł������Ȃ������̂Œ��ڔ�r�͂ł��Ă��܂��񂪁AWebBrowser�ɔ��css�̑}���^�C�~���O�iNavigated��DOMContentLoaded�j���x���i�^�C�~���O�łȂ����f���H�j�悤�Ȉ�ۂł��B  
-���̂��ߍČ������ɕ\������σo�^�o�^���܂��B
+最低限のイベントはありますが、操作周りはInvokeScriptAsyncによるJavaScriptの実行に頼るしかありません。  
+JS全くわからない身としては「勘弁してくれよ」と言いたいですねｗ
 
 
-���@������Ƃ͎v���܂����AEdge�̊J���҃c�[���̏o�������킩�炸�f�o�b�O���ʓ|�ł����B
+
+旧版が動かなかったので直接比較はできていませんが、WebBrowserに比べcssの挿入タイミング（NavigatedとDOMContentLoaded）が遅い（タイミングでなく反映か？）ような印象です。  
+そのため再検索時に表示が大変バタバタします。
+
+
+方法があるとは思いますが、Edgeの開発者ツールの出し方がわからずデバッグが面倒でした。
 
 ---
-���z�Ƃ��Ắu����܂肤�ꂵ���Ȃ��Ȃ��v�ƂȂ�܂����A.NET Framework4.8 XAML Islands�ɂ͔��Ɋ��Ҋ��������Ă��܂��B  
-UWP�͐��������������A�N���V�b�N�f�X�N�g�b�v�A�v����I�����Ă��܂�����UWP�ł����ł��Ȃ��i�ł��Ă����ɖʓ|�ȁj���Ƃ������Ă��ă����������Ă����Ƃ���A������������݊�肪����Ƃ͎v���Ă��܂���ł����B
+感想としては「あんまりうれしくないなぁ」となりますが、.NET Framework4.8 XAML Islandsには非常に期待感を持っています。  
+UWPは制限事項が多く、クラシックデスクトップアプリを選択していましたがUWPでしかできない（できても非常に面倒な）ことも増えてきてモヤモヤしていたところ、向こうから歩み寄りがあるとは思っていませんでした。
