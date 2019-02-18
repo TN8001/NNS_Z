@@ -1,6 +1,5 @@
 ﻿まさかの更新 
 # NNS_Z ニコ生サーチ(雑) on the Edge
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
 ![アプリスクリーンショット](AppImage.png)
 ## 概要
 [Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit)にEdgeベースのWebViewが入ったので、試用がてら動かなくなっていたNNS_Zをバージョンアップ。  
