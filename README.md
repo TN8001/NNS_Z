@@ -1,14 +1,16 @@
 ﻿まさかの更新 
 # NNS_Z ニコ生サーチ(雑) on the Edge
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
-![アプリスクリーンショット](https://github.com/TN8001/NNS_Z/blob/master/AppImage.png)
+![アプリスクリーンショット](AppImage.png)
 ## 概要
 [Windows Community Toolkit](https://github.com/Microsoft/WindowsCommunityToolkit)にEdgeベースのWebViewが入ったので、試用がてら動かなくなっていたNNS_Zをバージョンアップ。  
 WebViewを使ってみたかっただけなので実用性は低いです。（[NNS_T](https://github.com/TN8001/NNS_T)をお使いください）  
 MSHTMLの依存がなくなったので一応バイナリ用意しました（Windows 10 April 2018 Update以降が必要 だと思います）
 
 ## ライセンス
-[MIT](https://github.com/TN8001/NNS_Z/blob/master/LICENSE)
+CC0 1.0 Universal
+
+[![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)](LICENSE)
 ## 注意事項
 * 一切責任は持ちません
 * 不要要素の非表示中心であまりレイアウトはいじっていませんが、環境によっては表示が崩れるかもしれません
