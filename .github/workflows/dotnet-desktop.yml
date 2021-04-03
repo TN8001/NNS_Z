@@ -30,10 +30,11 @@ jobs:
         run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --no-build
 
       - name: Archive
-        uses: thedoctor0/zip-release@master
-        with:
-          filename: "release.zip"
-          exclusions: "NNS_Z/bin/Release/net5.0-windows/publish/"
+        run: powershell Compress-Archive -Path NNS_Z/bin/Release/net5.0-windows/publish -DestinationPath release.zip
+        #uses: thedoctor0/zip-release@master
+        #with:
+        #  filename: "release.zip"
+        #  exclusions: "NNS_Z/bin/Release/net5.0-windows/publish/"
 
       - name: Release
         uses: ncipollo/release-action@v1
