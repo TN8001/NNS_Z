@@ -1,23 +1,24 @@
-﻿using System.Xml.Serialization;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Xml.Serialization;
 
 namespace NNS_Z
 {
-    public class WindowModel : Observable
+    public class WindowModel : ObservableObject
     {
         [XmlAttribute]
-        public double Top { get => _Top; set => Set(ref _Top, value); }
+        public double Top { get => _Top; set => SetProperty(ref _Top, value); }
         private double _Top;
 
         [XmlAttribute]
-        public double Left { get => _Left; set => Set(ref _Left, value); }
+        public double Left { get => _Left; set => SetProperty(ref _Left, value); }
         private double _Left;
 
         [XmlAttribute]
-        public double Width { get => _Width; set => Set(ref _Width, value); }
+        public double Width { get => _Width; set => SetProperty(ref _Width, value); }
         private double _Width;
 
         [XmlAttribute]
-        public double Height { get => _Height; set => Set(ref _Height, value); }
+        public double Height { get => _Height; set => SetProperty(ref _Height, value); }
         private double _Height;
 
         public WindowModel()

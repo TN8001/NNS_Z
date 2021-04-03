@@ -23,11 +23,11 @@ namespace NNS_Z
             Name = assembly.GetName().Name;
             var version = assembly.GetName().Version;
             Version = new Version(version.Major, version.Minor, version.Build);
-            Title = Get<AssemblyTitleAttribute>(assembly).Title;
-            Description = Get<AssemblyDescriptionAttribute>(assembly).Description;
-            Copyright = Get<AssemblyCopyrightAttribute>(assembly).Copyright;
+            Title = Get<AssemblyTitleAttribute>(assembly)?.Title;
+            Description = Get<AssemblyDescriptionAttribute>(assembly)?.Description;
+            Copyright = Get<AssemblyCopyrightAttribute>(assembly)?.Copyright;
 
-            T Get<T>(Assembly a) where T : Attribute
+            static T Get<T>(Assembly a) where T : Attribute
                 => (T)Attribute.GetCustomAttribute(a, typeof(T));
         }
     }

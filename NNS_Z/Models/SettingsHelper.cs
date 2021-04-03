@@ -15,8 +15,8 @@ namespace NNS_Z
         {
             if(string.IsNullOrEmpty(path)) path = GetDefaultPath();
 
-            using(var xr = XmlReader.Create(path))
-                return (T)new XmlSerializer(typeof(T)).Deserialize(xr);
+            using var xr = XmlReader.Create(path);
+            return (T)new XmlSerializer(typeof(T)).Deserialize(xr);
         }
 
         ///<summary>ファイルからデシリアライズ 失敗時はnew T (ファイル名省略時[ユーザー]\AppData\Local\[アセンブリ名]\user.config)</summary>
@@ -40,12 +40,10 @@ namespace NNS_Z
 
             Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-            using(var st = new StreamWriter(path, false, Encoding.UTF8))
-            {
-                var ns = new XmlSerializerNamespaces();
-                ns.Add("", "");
-                new XmlSerializer(typeof(T)).Serialize(st, obj, ns);
-            }
+            using var st = new StreamWriter(path, false, Encoding.UTF8);
+            var ns = new XmlSerializerNamespaces();
+            ns.Add("", "");
+            new XmlSerializer(typeof(T)).Serialize(st, obj, ns);
         }
 
         ///<summary>デフォルトファイルパス ([ユーザー]\AppData\Local\[アセンブリ名]\user.config)</summary>

@@ -2,14 +2,20 @@
   x:Class="NNS_Z.MainWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:WPF="clr-namespace:Microsoft.Toolkit.Win32.UI.Controls.WPF;assembly=Microsoft.Toolkit.Win32.UI.Controls"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:local="clr-namespace:NNS_Z"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
   Title="{x:Static local:ProductInfo.Title}"
-  Width="{Binding Settings.Window.Width, Mode=TwoWay}"
-  Height="{Binding Settings.Window.Height, Mode=TwoWay}"
+  Width="{Binding Window.Width, Mode=TwoWay}"
+  Height="{Binding Window.Height, Mode=TwoWay}"
+  d:DataContext="{d:DesignInstance Type=local:SettingsModel}"
+  d:DesignHeight="500"
+  d:DesignWidth="400"
   Closing="Window_Closing"
-  Left="{Binding Settings.Window.Left, Mode=TwoWay}"
-  Top="{Binding Settings.Window.Top, Mode=TwoWay}">
+  Left="{Binding Window.Left, Mode=TwoWay}"
+  Top="{Binding Window.Top, Mode=TwoWay}"
+  mc:Ignorable="d">
   <Window.Resources>
     <Storyboard x:Key="MyStoryboard">
       <DoubleAnimation
@@ -20,24 +26,23 @@
         Duration="{x:Static local:MainWindow.Duration}" />
     </Storyboard>
   </Window.Resources>
-  <Grid>
+
+  <DockPanel>
     <Rectangle
       Name="rectangle"
       Height="5"
-      VerticalAlignment="Top">
+      DockPanel.Dock="Top">
       <Rectangle.Fill>
-        <SolidColorBrush Color="{Binding Settings.Color.Progress}" />
+        <SolidColorBrush Color="{Binding Color.Progress}" />
       </Rectangle.Fill>
       <Rectangle.RenderTransform>
         <ScaleTransform ScaleX="0" ScaleY="1" />
       </Rectangle.RenderTransform>
     </Rectangle>
-    <WPF:WebView
-      x:Name="WebView"
-      Margin="0,5,0,0"
+    <wv2:WebView2
+      x:Name="webView"
       ContentLoading="WebView_ContentLoading"
-      DOMContentLoaded="WebView_DOMContentLoaded"
       NavigationCompleted="WebView_NavigationCompleted"
       NavigationStarting="WebView_NavigationStarting" />
-  </Grid>
+  </DockPanel>
 </Window>

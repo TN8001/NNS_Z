@@ -1,21 +1,25 @@
-﻿/* css良くわかっていないので雑な感じです */
-
-body {
-    padding-top: 0px !important;
+﻿body {
+    overflow-x: hidden !important;
+    zoom: 85% !important;
+    text-shadow: 0px 0px 0px !important;
 }
 
 .search-input-area {
     padding-top: 0px !important;
     margin: 0 !important;
-    text-align: left !important;
     border: 0px !important;
-    box-shadow: 0 0 0 0 !important;
     background-image: inherit !important;
 }
 
-.search-form {
-    align-self: auto !important;
-    width: auto !important;
+.searchPage-ProgramList_ThumbnailLink {
+    -ms-flex: 0 0 100px !important;
+    flex: 0 0 100px !important;
+    width: 100px !important;
+    height: 60px !important;
+}
+
+.searchPage-ProgramList_TitleLink {
+    color: #0080ff !important;
 }
 
 #page_cover {
@@ -24,56 +28,25 @@ body {
     padding: 0 5px !important;
 }
 
-#option_area {
-    padding: 0 !important;
-}
-
-.search-option-toggle-button-area {
-    position: relative !important;
-    margin-left: auto !important;
-}
-
-.thumbnail-area {
-    width: 200px !important;
-    height: auto !important;
-}
-
-.search-result-summary {
+#searchForm,
+.tag_suggest_input_block,
+#search_form_word {
     width: 100% !important;
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    padding: 0 10px !important;
-    text-align: left !important;
-    align-self: auto !important;
 }
 
-.description-area {
-    max-height: inherit !important;
-}
 
-.program-statistics-list {
-    margin-top: 0px !important;
-}
-
-.provider-area {
-    position: initial !important;
-}
-
-#siteHeader,
-header,
-.search-tab-list,
-.select-mode-area,
-.broadcast-time-filter-area,
-.timeshift-button-label,
-.help-anchor,
+#CommonHeader,
+#page_header,
+#billboard_ad,
 #side-for-following-ad,
+#main-for-following-ad > .searchPage-Layout_Section:nth-child(2),
+#main-for-following-ad > .searchPage-Layout_Section:nth-child(3),
 #footer_ads,
-#sidewall_ad,
-.notice-message,
-.program-status,
-nav,
-footer,
-.recommend-list-header + .result-list,
-.recommend-list-header {
+#live-footer,
+.search-tab-list,
+.searchPage-SearchHeader,
+.searchPage-ProgramList_StatusLabel-live,
+.searchPage-ProgramList_TimeShift,
+.searchPage-SearchFilter_Sort {
     display: none !important;
 }

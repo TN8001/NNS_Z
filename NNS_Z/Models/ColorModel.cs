@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
 using System.Windows.Media;
 using System.Xml.Serialization;
 
 namespace NNS_Z
 {
-    public class ColorModel : Observable
+    public class ColorModel : ObservableObject
     {
         [XmlAttribute("Progress")]
         public string ProgressString
@@ -13,7 +14,7 @@ namespace NNS_Z
             set { try { Progress = Progress.ConvertFromString(value); } catch { } }
         }
         [XmlIgnore]
-        public Color Progress { get => _Progress; set => Set(ref _Progress, value); }
+        public Color Progress { get => _Progress; set => SetProperty(ref _Progress, value); }
         private Color _Progress;
 
         public ColorModel()
