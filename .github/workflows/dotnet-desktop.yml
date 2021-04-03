@@ -12,19 +12,28 @@ jobs:
   deploy:
     runs-on: windows-latest
     steps:
+      - name: Checkout
       - uses: actions/checkout@v2
+
+      - name: Install .NET5
       - uses: actions/setup-dotnet@v1
         with:
            dotnet-version: 5.0.x
 
+      - name: Restore
       - run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Build
       - run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
+
+      - name: Publish
       - run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --no-build
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           #artifacts: "release.tar.gz,foo/*.txt"
+          artifacts: "NNS_Z/bin/Release/net5.0-windows/publish/NNS_Z.exe"
           #"NNS_Z/bin/Release/net5.0-windows/publish/NNS_Z.exe"
           #bodyFile: "body.md"
           token: ${{ secrets.GITHUB_TOKEN }}
