@@ -1,0 +1,40 @@
+name: .NET5 Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  PROJECT_PATH: NNS_Z/NNS_Z.csproj
+  SOLUTION_NAME: NNS_Z 
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install .NET5
+        uses: actions/setup-dotnet@v1
+        with:
+           dotnet-version: 5.0.x
+
+      - name: Restore
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+
+      - name: Build
+        run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
+
+      - name: Publish
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --no-build
+
+      - name: Archive
+        run: powershell Compress-Archive -Path ${{ env.SOLUTION_NAME }}/bin/Release/net5.0-windows/publish/* -DestinationPath ${{ env.SOLUTION_NAME }}.zip
+
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ env.SOLUTION_NAME }}.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
