@@ -29,11 +29,17 @@ jobs:
       - name: Publish
         run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --no-build
 
-      - name: Create Release
+      - name: Archive
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: "release.zip"
+          exclusions: "NNS_Z/bin/Release/net5.0-windows/publish/"
+
+      - name: Release
         uses: ncipollo/release-action@v1
         with:
           #artifacts: "release.tar.gz,foo/*.txt"
-          artifacts: "NNS_Z/bin/Release/net5.0-windows/publish/NNS_Z.exe"
+          artifacts: "release.zip"
           #"NNS_Z/bin/Release/net5.0-windows/publish/NNS_Z.exe"
           #bodyFile: "body.md"
           token: ${{ secrets.GITHUB_TOKEN }}
